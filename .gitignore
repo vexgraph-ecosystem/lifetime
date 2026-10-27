@@ -41,15 +41,13 @@
 *.su
 *.idb
 *.pdb
-
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
-
-# debug information files
 *.dwo
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+cmake-build-*/
+build/
+out/
+
