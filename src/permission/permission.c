@@ -1,5 +1,6 @@
 #include "permission/permission.h"
 #include "permission/permission_backend.h"
+#include "platform/platform.h"
 
 #include "annotation/definition.h"
 #include "annotation/overview.h"
@@ -114,7 +115,7 @@ bool Permission_openSettings(PermissionKind kind) {
 }
 
 // PORTABLE BACKEND (non-Apple): the kind exists, the host has no concept yet.
-#if !defined(__APPLE__)
+#if !defined(VEX_PLATFORM_APPLE)
 /** Non-Apple fallback: reports every permission as unsupported. */
 PermissionStatus permissionBackendStatus(PermissionKind kind) {
     (void) kind;
