@@ -1,4 +1,5 @@
 #include "capability/capability.h"
+#include "platform/platform.h"
 
 #include <stddef.h>
 
@@ -6,7 +7,7 @@
 #include "annotation/overview.h"
 #include "annotation/getter.h"
 
-#if defined(__APPLE__)
+#if defined(VEX_PLATFORM_APPLE)
 #include <sys/sysctl.h>
 #endif
 
@@ -65,7 +66,7 @@ static uint64_t s_bits = 0;      // one bit per CapabilityKind
 static bool s_probed = false;    // the one-time probe has run
 static int s_osMajor = -1;       // running macOS major (0 = unknown)
 
-#if defined(__APPLE__)
+#if defined(VEX_PLATFORM_APPLE)
 // Read one hw.optional.* boolean sysctl; missing/nonzero semantics -> bool.
 static bool sysctlFlag(const char *name) {
     uint64_t value = 0;
@@ -78,7 +79,7 @@ static bool sysctlFlag(const char *name) {
 
 // The running macOS major version, or 0 when unknown.
 static int probeOsMajor(void) {
-#if defined(__APPLE__)
+#if defined(VEX_PLATFORM_APPLE)
     char buf[32];
     size_t size = sizeof buf;
     if (sysctlbyname("kern.osproductversion", buf, &size, nullptr, 0) != 0)
@@ -100,7 +101,7 @@ static void probeOnce(void) {
     s_probed = true;
     s_bits = 0;
     s_osMajor = probeOsMajor();
-#if defined(__APPLE__)
+#if defined(VEX_PLATFORM_APPLE)
     if (sysctlFlag("hw.optional.arm.FEAT_DotProd")) s_bits |= ((uint64_t) 1 << CAPABILITY_CPU_DOTPROD);
     if (sysctlFlag("hw.optional.arm.FEAT_AES"))     s_bits |= ((uint64_t) 1 << CAPABILITY_CPU_AES);
     if (sysctlFlag("hw.optional.arm.FEAT_SHA256"))  s_bits |= ((uint64_t) 1 << CAPABILITY_CPU_SHA256);
