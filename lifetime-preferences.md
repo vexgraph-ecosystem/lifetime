@@ -3,13 +3,13 @@
 > Universal constitution: `gist.md` is the compressed law list; `PREFERENCES.md` is its rationale.
 
 ## 0. Constitution Link (supreme)
-- [gist.md](https://gist.github.com/vex-graph/4132a6c45cb6d3797c3e8eff2e94035a#file-gist-md) — the compressed law list, mirrored in this workspace at `../../../metadata/gists/preferences/gist.md`. It is the only normative law text; `../../../metadata/gists/preferences/PREFERENCES.md` carries the rationale and is never ingested whole. Numbers are slice addresses inside one file, never law identity: cite by Title.
+- [gist.md](https://gist.github.com/vex-graph/4132a6c45cb6d3797c3e8eff2e94035a#file-gist-md) — the compressed law list, mirrored in this workspace at `../../metadata/gists/preferences/gist.md`. It is the only normative law text; `../../../metadata/gists/preferences/PREFERENCES.md` carries the rationale and is never ingested whole. Numbers are slice addresses inside one file, never law identity: cite by Title.
 - All universal laws bind this repository. Read one on demand from the workspace root: `./tools/prefs law "<title>"`, `./tools/prefs section "<section>"`, `./tools/prefs repo <name>`.
 - Exclusive `lifetime` (R0 Kernel Host) preferences. R0 owns lifetimes, native OS windowing, process/application lifecycle, capability gating, and memory substrate attestation. R1 comprises Relational Engine memory/storage/cache and Hotcwap dynamic module reloading. R2 comprises Vexspoke CPU computation/behavior. R0 owns residency and hardware ground truth.
 
 ## 1. Repo-Local Law Index (Binding Matrix)
 
-Universal laws are inherited from the compressed constitution (`../../../metadata/gists/preferences/gist.md`); this table indexes the additional laws specific to this repository.
+Universal laws are inherited from the compressed constitution (`../../metadata/gists/preferences/gist.md`); this table indexes the additional laws specific to this repository.
 
 | Law Title | Scope | Enforcement |
 | :--- | :--- | :--- |
@@ -68,8 +68,34 @@ freezes windows/animations and tears. Render continuously during every drag:
 
 Windows present when the scene is dirty, not on a timer or fixed poll:
 
-1. **Dirty Bit Gating:** `Window_present` is a no-op unless marked dirty.
-2. **Event Wake:** Window and input events wake the presentation seam.
-3. **Compositor Decoupling:** Rendering a surface is decoupled from blitting
-   to the window surface; the host orchestrates presentation only when
-   new frames are ready.
+## 3. Current State (Living Documentation Law)
+
+- `src/platform/platform.h` — the single spelling of the platform: six exact target macros
+  (`VEX_PLATFORM_APPLE_SILICON`, `_APPLE_X86_64`, `_LINUX_ARM64`, `_LINUX_X86_64`,
+  `_WINDOWS_ARM64`, `_WINDOWS_X86_64`) with coarse axes (`VEX_PLATFORM_APPLE/_WINDOWS/_LINUX`,
+  `VEX_ARCH_ARM/_X86`, `VEX_ARCH_ARM64/_X86_64`) derived from them; 32-bit x86/arm
+  refused with their own diagnostic. Home is R0, so every tier includes it downward.
+- `src/window/window.c` — the sole C owner of the Window API (One File, All Platforms Law):
+  Windows branch from the former `window_win32.c`, Wayland branch gated on
+  `VEX_PLATFORM_LINUX && VEX_WINDOW_BACKEND_WAYLAND`, Linux X11 branch from the former
+  generic stub. `window_win32.c`, `window_linux.c` and `window_wayland.c` no longer exist.
+- `src/window/window_cocoa.m` and `src/window/traffic_light_cocoa.m` remain `.m` — the
+  only permitted exception (Objective-C cannot be a branch inside a `.c`).
+- `src/window/window_event.c` and `src/window/window.h` are unchanged; the `.h` is the seam.
+
+## 4. Scope and Limitations
+
+- The Windows and Linux C branches are not compiled on this host (darwin-arm64); the
+  merged file's preprocessor is balanced and its Darwin build passes, but the bodies
+  are unproven on those targets.
+- The Linux branch still carries the generic stub body and a stale "Win32 backend"
+  annotation; a real Linux/Windows compile is required to validate it.
+- `tests/lifetime/platform/platform_test.c` proves the platform resolution on
+  darwin-arm64 only.
+
+## 5. Readiness Cross-Reference (Living Documentation Law)
+
+- Feature readiness matrix: [lifetime](https://gist.github.com/vex-graph/6943f92acb931b25dad1073c46da6ce7#file-lifetime-md).
+- Open blockers and deferred decisions: [ecosystem blockers Gist](https://gist.github.com/vex-graph/e921fa188eebbd0c68c4e59646109887).
+- Platform owner test: `tests/lifetime/platform/platform_test.c` (✅, darwin-arm64).
+- Window tests: `tests/lifetime/window/window_test.c`, `present_surface_test.c` (✅, darwin-arm64, Cocoa path).
