@@ -402,7 +402,7 @@ void Window_setGravityTopLeft(Window *window);
 // every presentsWithTransaction=YES drawable would stall behind it —
 // Begin/End release YES-presents on worker cadence. Apple-only (impl in
 // window/window_cocoa.m, like Window_metalLayer); call from the present
-// worker only, guarded by #ifdef __APPLE__ at the call site.
+// worker only, guarded by VEX_PLATFORM_APPLE at the call site.
 void Window_workerPresentBegin(void);
 void Window_workerPresentEnd(void);
 
