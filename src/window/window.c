@@ -5592,3 +5592,4 @@ void TrafficLight_setFloating(TrafficLight *self, bool floating) {
 }
 
 #endif
+#endif // VEX_PLATFORM_WINDOWS / _LINUX
